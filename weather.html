@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link href='http://cdn.webfont.youziku.com/webfonts/nomal/117554/45817/5ae9192df629d90e54a0802c.css' rel='stylesheet' type='text/css' />
+    <style>
+        .max{margin-top: 100px}
+        .title{
+            font-family:"ChannelSlanted2";
+            font-size:25px;
+            text-shadow: -5px 5px 5px #222222;
+        }
+        .btn{font-family:'华文隶书'; font-size:20px;}
+        .btn,input{
+            box-shadow:1px 1px 15px #cccccc;
+            height:50px;
+            margin: 30px 0 30px 0;
+            background-color: rgba(255,255,255,0.2);
+            font-weight:600;
+            border-radius:10px;
+        }
+        input{
+            padding:0px 20px 0px 20px;;
+            border: none;
+        }
+        body{
+            background: url(http://pic1.win4000.com/wallpaper/8/5948977900c50.jpg) -400px -500px ;
+            color:white;
+        }
+        h2{text-shadow: -3px 3px 5px #000000}
+        .show{
+            box-sizing:border-box;
+            height:250px;
+            line-height:30px;
+            padding:30px 20px 20px 20px;
+            border-radius:10px;
+            background:rgba(255,255,255,0.2);
+            color:black;
+            box-shadow: -10px 10px 30px #222222;
+        }
+    </style>
+</head>
+<body>
+<div class="max">
+<div class="container">
+    <div class="row">
+        <div class="col-xs-3"></div>
+        <div class="col-xs-6 text-center">
+            <p class="title">Free Code Camp Zipline </p>
+            <h2>Weather App</h2>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-3"></div>
+        <div class="col-xs-6 text-center">
+                <div class="row">
+                    <div class="col-xs-6"><input type="text" value="Please enter the city name"/></div>
+                    <div class="col-xs-2"><button class="btn today text-center font">Today</button></div>
+                    <div class="col-xs-2"><button class="btn future text-center font">Future</button></div>
+                    <div class="col-xs-2"><button class="btn current text-center font">Current</button></div>
+                </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-2"></div>
+        <div class="col-xs-8 show">
+        </div>
+    </div>
+</div>
+</div>
+</body>
+<script>
+    $(document).ready(function() {
+        var html = "";
+        $(".today").on("click", function (){
+            var cityname = $(" input[ type='text' ] ").val();
+            var key = "d27f1a49a4d0612b4d0cfe233e515592";
+            var url = "http://v.juhe.cn/weather/index?format=2&cityname=" + cityname + "&key=" + key;
+            $.ajax(
+                {
+                    url: url,
+                    type: "get",
+                    dataType: 'jsonp',
+                    crossDomain: true,
+                    success: function (data) {
+                        if (data) {
+                            var a = data.result.today;
+                            html = "城市名称：" + a.city + "    当日日期：" + a.date_y + "," + a.week + "    当日气温：" + a.temperature + "    当日天气：" + a.weather + "<br>";
+                            html += "当日风度：" + a.wind + "    晨炼指数：" + a.exercise_index + "<br>";
+                            html += "干燥指数：" + a.drying_index + "    洗车指数：" + a.wash_index + "<br>";
+                            html += "紫外线强度：" + a.uv_index + "    穿衣指数：" + a.dressing_index + "    旅游指数：" + a.travel_index + "<br>";
+                            html += "穿衣建议：" + a.dressing_advice;
+                            $(".show").html(html);
+                        } else {
+                            console.error("err");
+                        }
+                    },
+                    error: function (error) {
+                        console.log(error);
+                        alert(error);
+                    }
+                });
+        });
+
+        $(".future").on("click", function (){
+            var cityname = $(" input[ type='text' ] ").val();
+            var key = "d27f1a49a4d0612b4d0cfe233e515592";
+            var url = "http://v.juhe.cn/weather/index?format=2&cityname=" + cityname + "&key=" + key;
+            $.ajax(
+                {
+                    url: url,
+                    type: "get",
+                    dataType: 'jsonp',
+                    crossDomain: true,
+                    success: function (data) {
+                        if (data) {
+                            var a = data.result.future;
+                            html="";
+                            for(var i=0;i<a.length;i++) {
+                                html += "时间：" + a[i].date + "    温度：" + a[i].temperature + "    天气：" + a[i].weather + "    风度：" + a[i].wind + "<br>";
+                            }
+                            $(".show").html(html);
+                        } else {
+                            console.error("err");
+                        }
+                    },
+                    error: function (error) {
+                        console.log(error);
+                        alert(error);
+                    }
+                });
+        });
+
+        $(".current").on("click", function (){
+            var cityname = $(" input[ type='text' ] ").val();
+            var key = "d27f1a49a4d0612b4d0cfe233e515592";
+            var url = "http://v.juhe.cn/weather/index?format=2&cityname=" + cityname + "&key=" + key;
+            $.ajax(
+                {
+                    url: url,
+                    type: "get",
+                    dataType: 'jsonp',
+                    crossDomain: true,
+                    success: function (data) {
+                        if (data) {
+                            var a = data.result.sk;
+                            html="更新时间："+a.time+"<br>当前温度："+a.temp+"<br>当前风向："+a.wind_direction+"<br>当前风力："+a.wind_strength+"<br>当前湿度："+a.humidity+"<br>";
+                            $(".show").html(html);
+                        } else {
+                            console.error("err");
+                        }
+                    },
+                    error: function (error) {
+                        console.log(error);
+                        alert(error);
+                    }
+                });
+        });
+
+    });
+
+
+
+
+</script>
+</html>
